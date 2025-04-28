@@ -76,6 +76,8 @@ public class CookingPostController {
             }
         }
 
+        
+
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
