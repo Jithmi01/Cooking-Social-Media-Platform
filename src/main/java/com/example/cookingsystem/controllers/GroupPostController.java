@@ -55,6 +55,17 @@ public class GroupPostController {
         List<GroupPostDTO.GroupPostResponse> posts = groupPostService.getPostsByUserId(userId);
         return ResponseEntity.ok(posts);
     }
+    /**
+     * Create a new group post
+     */
+    
+    @PostMapping
+    public ResponseEntity<GroupPostDTO.GroupPostResponse> createGroupPost(
+            @RequestBody GroupPostDTO.GroupPostRequest postRequest,
+            @RequestHeader("User-ID") String userId) {
+        GroupPostDTO.GroupPostResponse createdPost = groupPostService.createGroupPost(postRequest, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
+    }
 
    
 }
