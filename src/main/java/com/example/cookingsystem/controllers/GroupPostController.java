@@ -77,6 +77,16 @@ public class GroupPostController {
         GroupPostDTO.GroupPostResponse updatedPost = groupPostService.updateGroupPost(postId, postRequest, userId);
         return ResponseEntity.ok(updatedPost);
     }
+    /**
+     * Delete a group post (soft delete)
+     */
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deleteGroupPost(
+            @PathVariable String postId,
+            @RequestHeader("User-ID") String userId) {
+        groupPostService.deleteGroupPost(postId, userId);
+        return ResponseEntity.noContent().build();
+    }
 
    
 }
