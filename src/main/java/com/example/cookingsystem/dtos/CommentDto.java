@@ -25,25 +25,48 @@ public class CommentDto {
 
     // Getters and Setters
 
+    public String getId() {
+        return id;
+    }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    public Date getCommentedAt() {
+        return commentedAt;
+    }
+
     public void setCommentedAt(Date commentedAt) {
         this.commentedAt = commentedAt;
+    }
+
+    public boolean isDeleteStatus() {
+        return deleteStatus;
     }
 
     public void setDeleteStatus(boolean deleteStatus) {
         this.deleteStatus = deleteStatus;
     }
 
+    public String getCommentedBy() {
+        return commentedBy;
+    }
+
     public void setCommentedBy(String commentedBy) {
         this.commentedBy = commentedBy;
+    }
+
+    public String getCommentedOn() {
+        return commentedOn;
     }
 
     public void setCommentedOn(String commentedOn) {
