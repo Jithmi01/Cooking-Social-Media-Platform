@@ -66,6 +66,17 @@ public class GroupPostController {
         GroupPostDTO.GroupPostResponse createdPost = groupPostService.createGroupPost(postRequest, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
+    /**
+     * Update an existing group post
+     */
+    @PutMapping("/{postId}")
+    public ResponseEntity<GroupPostDTO.GroupPostResponse> updateGroupPost(
+            @PathVariable String postId,
+            @RequestBody GroupPostDTO.GroupPostRequest postRequest,
+            @RequestHeader("User-ID") String userId) {
+        GroupPostDTO.GroupPostResponse updatedPost = groupPostService.updateGroupPost(postId, postRequest, userId);
+        return ResponseEntity.ok(updatedPost);
+    }
 
    
 }
