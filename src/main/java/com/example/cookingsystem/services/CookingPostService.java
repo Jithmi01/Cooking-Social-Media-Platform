@@ -1,6 +1,7 @@
 package com.example.cookingsystem.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,21 @@ public class CookingPostService {
         this.cookingPostRepository = cookingPostRepository;
         this.userRepository = userRepository;
     }
+    // Get all posts
+    public List<CookingPost> getAllPosts() {
+        return cookingPostRepository.findAllByDeleteStatusFalse();
+    }
+
+    // Get posts by user
+    public List<CookingPost> getPostsByUser(String userId) {
+        return cookingPostRepository.findByCreatedByIdAndDeleteStatusFalse(userId);
+    }
+
+    // Get post by ID
+    public Optional<CookingPost> getPostById(String id) {
+        return cookingPostRepository.findByIdAndDeleteStatusFalse(id);
+    }
+
 
 
     // Create post
