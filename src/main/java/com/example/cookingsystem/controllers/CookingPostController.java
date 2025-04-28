@@ -39,7 +39,7 @@ public class CookingPostController {
     }
 
     // Get posts by current user
-    
+
     @GetMapping("/my-posts/{userId}")
     public ResponseEntity<List<CookingPost>> getMyPosts(@PathVariable String userId) {
 
@@ -48,6 +48,7 @@ public class CookingPostController {
     }
 
     // Get post by ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<CookingPost> getPostById(@PathVariable String id) {
         Optional<CookingPost> post = cookingPostService.getPostById(id);
