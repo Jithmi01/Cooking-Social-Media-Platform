@@ -13,13 +13,13 @@ public class Comment {
     private String id;
     private String comment;
     private Date commentedAt;
+    private boolean deleteStatus;
 
     @DBRef(lazy = true)
     @JsonSerialize(using = UserSerializer.class)
     private User commentedBy;
 
-
-
+    
     // Default constructor
     public Comment() {
     }
@@ -30,43 +30,52 @@ public class Comment {
         this.id = id;
         this.comment = comment;
         this.commentedAt = commentedAt;
+        this.deleteStatus = deleteStatus;
         this.commentedBy = commentedBy;
         
     }
 
-   // Getters and setters
+    // Getters and setters
 
-   public String getId() {
-    return id;
-}
+    public String getId() {
+        return id;
+    }
 
-public void setId(String id) {
-    this.id = id;
-}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-public String getComment() {
-    return comment;
-}
+    public String getComment() {
+        return comment;
+    }
 
-public void setComment(String comment) {
-    this.comment = comment;
-}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-public Date getCommentedAt() {
-    return commentedAt;
-}
+    public Date getCommentedAt() {
+        return commentedAt;
+    }
 
-public void setCommentedAt(Date commentedAt) {
-    this.commentedAt = commentedAt;
-}
+    public void setCommentedAt(Date commentedAt) {
+        this.commentedAt = commentedAt;
+    }
 
-public User getCommentedBy() {
-    return commentedBy;
-}
+    public boolean isDeleteStatus() {
+        return deleteStatus;
+    }
 
-public void setCommentedBy(User commentedBy) {
-    this.commentedBy = commentedBy;
-}
+    public void setDeleteStatus(boolean deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
+    public User getCommentedBy() {
+        return commentedBy;
+    }
+
+    public void setCommentedBy(User commentedBy) {
+        this.commentedBy = commentedBy;
+    }
 
 
 }

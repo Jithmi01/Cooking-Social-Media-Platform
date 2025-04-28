@@ -6,6 +6,7 @@ public class CommentDto {
     private String id;
     private String comment;
     private Date commentedAt;
+    private boolean deleteStatus;
     private String commentedBy; // Only string (e.g., user ID or username)
     private String commentedOn; // Optional: ID of the CookingPost
 
@@ -17,6 +18,7 @@ public class CommentDto {
         this.id = id;
         this.comment = comment;
         this.commentedAt = commentedAt;
+        this.deleteStatus = deleteStatus;
         this.commentedBy = commentedBy;
         this.commentedOn = commentedOn;
     }
@@ -45,6 +47,14 @@ public class CommentDto {
 
     public void setCommentedAt(Date commentedAt) {
         this.commentedAt = commentedAt;
+    }
+
+    public boolean isDeleteStatus() {
+        return deleteStatus;
+    }
+
+    public void setDeleteStatus(boolean deleteStatus) {
+        this.deleteStatus = deleteStatus;
     }
 
     public String getCommentedBy() {

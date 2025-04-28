@@ -14,21 +14,20 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
 
     @Autowired
     public CommentService(CommentRepository commentRepository,
-                          UserRepository userRepository
-                          ) {
+                          UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        
+
     }
 
-     // Get all comments
-     public List<Comment> getAllComments() {
+    // Get all comments
+    public List<Comment> getAllComments() {
         return commentRepository.findAllByDeleteStatusFalse();
     }
 
@@ -45,23 +44,40 @@ public class CommentService {
     // Get comments by user ID
     public List<Comment> getCommentsByUserId(String userId) {
         return commentRepository.findByCommentedByIdAndDeleteStatusFalse(userId);
-    }  
+    }
 
     // Create comment
     public Comment createComment(String commentText, String postId, String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
 
-        if (userOptional.isPresent() ) {
+        if (userOptional.isPresent() && postOptional.isPresent()) {
             Comment comment = new Comment();
             comment.setComment(commentText);
             comment.setCommentedAt(new Date());
             comment.setCommentedBy(userOptional.get());
+            comment.setDeleteStatus(false);
 
            
+
             return commentRepository.save(comment);
         }
         return null;
     }
 
-   
+    // Update comment
+    public Comment updateComment(String id, String newCommentText) {
+        return commentRepository.findById(id).map(comment -> {
+            comment.setComment(newCommentText);
+            return commentRepository.save(comment);
+        }).orElse(null);
+    }
+
+    // Delete comment (soft delete)
+    public boolean deleteComment(String id) {
+        return commentRepository.findById(id).map(comment -> {
+            comment.setDeleteStatus(true);
+            commentRepository.save(comment);
+            return true;
+        }).orElse(false);
+    }
 }
