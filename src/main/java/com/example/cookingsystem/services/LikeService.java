@@ -29,7 +29,33 @@ public class LikeService {
 
     }
 
-   
+    // Get all likes
+    public List<Like> getAllLikes() {
+        return likeRepository.findAllByDeleteStatusFalse();
+    }
+
+    // Get like by ID
+    public Optional<Like> getLikeById(String id) {
+        return likeRepository.findByIdAndDeleteStatusFalse(id);
+    }
+
+    // Get likes by post ID
+    public List<Like> getLikesByPostId(String postId) {
+        return likeRepository.findByLikedPostIdAndDeleteStatusFalse(postId);
+    }
+
+    // Get likes by user ID
+    public List<Like> getLikesByUserId(String userId) {
+        List<Like> likes = likeRepository.findByLikedByIdAndDeleteStatusFalse(userId);
+        Collections.reverse(likes);
+        return likes;
+    }
+
+    // Check if user liked a post
+    public Optional<Like> hasUserLikedPost(String userId, String postId) {
+        return likeRepository.findByLikedByIdAndLikedPostIdAndDeleteStatusFalse(userId, postId);
+    }
+
     // Create like
     public Like createLike(String postId, String userId) {
         Optional<User> userOptional = userRepository.findById(userId);

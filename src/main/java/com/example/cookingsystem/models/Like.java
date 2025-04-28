@@ -12,12 +12,14 @@ public class Like {
     @Id
     private String id;
     private Date likedAt;
+    private boolean deleteStatus;
 
     @DBRef(lazy = true)
     @JsonSerialize(using = UserSerializer.class)
     private User likedBy;
 
-
+    @DBRef(lazy = true)
+    private CookingPost likedPost;
 
     // Default constructor
     public Like() {
@@ -27,11 +29,11 @@ public class Like {
     public Like(String id, Date likedAt, boolean deleteStatus, User likedBy, CookingPost likedPost) {
         this.id = id;
         this.likedAt = likedAt;
+        this.deleteStatus = deleteStatus;
         this.likedBy = likedBy;
-        
+        this.likedPost = likedPost;
     }
 
-    
     // Getters and setters
 
     public String getId() {
@@ -50,6 +52,13 @@ public class Like {
         this.likedAt = likedAt;
     }
 
+    public boolean isDeleteStatus() {
+        return deleteStatus;
+    }
+
+    public void setDeleteStatus(boolean deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
 
     public User getLikedBy() {
         return likedBy;
@@ -58,5 +67,8 @@ public class Like {
     public void setLikedBy(User likedBy) {
         this.likedBy = likedBy;
     }
+
+ 
+
 
 }
