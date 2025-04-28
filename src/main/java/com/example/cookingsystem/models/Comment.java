@@ -13,14 +13,12 @@ public class Comment {
     private String id;
     private String comment;
     private Date commentedAt;
-    private boolean deleteStatus;
 
     @DBRef(lazy = true)
     @JsonSerialize(using = UserSerializer.class)
     private User commentedBy;
 
-    @DBRef(lazy = true)
-    private CookingPost commentedOn;
+
 
     // Default constructor
     public Comment() {
@@ -28,41 +26,47 @@ public class Comment {
 
     // Overloaded constructor
     public Comment(String id, String comment, Date commentedAt, boolean deleteStatus,
-                   User commentedBy, CookingPost commentedOn) {
+                   User commentedBy) {
         this.id = id;
         this.comment = comment;
         this.commentedAt = commentedAt;
-        this.deleteStatus = deleteStatus;
         this.commentedBy = commentedBy;
-        this.commentedOn = commentedOn;
+        
     }
 
-    // Getters and setters
+   // Getters and setters
 
-    public void setId(String id) {
-        this.id = id;
-    }
+   public String getId() {
+    return id;
+}
+
+public void setId(String id) {
+    this.id = id;
+}
+
+public String getComment() {
+    return comment;
+}
+
+public void setComment(String comment) {
+    this.comment = comment;
+}
+
+public Date getCommentedAt() {
+    return commentedAt;
+}
+
+public void setCommentedAt(Date commentedAt) {
+    this.commentedAt = commentedAt;
+}
+
+public User getCommentedBy() {
+    return commentedBy;
+}
+
+public void setCommentedBy(User commentedBy) {
+    this.commentedBy = commentedBy;
+}
 
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setCommentedAt(Date commentedAt) {
-        this.commentedAt = commentedAt;
-    }
-
-
-    public void setDeleteStatus(boolean deleteStatus) {
-        this.deleteStatus = deleteStatus;
-    }
-
-
-    public void setCommentedBy(User commentedBy) {
-        this.commentedBy = commentedBy;
-    }
-
-    public void setCommentedOn(CookingPost commentedOn) {
-        this.commentedOn = commentedOn;
-    }
 }

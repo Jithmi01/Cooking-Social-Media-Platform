@@ -15,17 +15,37 @@ import java.util.Optional;
 public class CommentService {
 
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
 
     @Autowired
-    public CommentService(
-                          UserRepository userRepository)
-                           {
+    public CommentService(CommentRepository commentRepository,
+                          UserRepository userRepository
+                          ) {
+        this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-       
+        
     }
 
-   
+     // Get all comments
+     public List<Comment> getAllComments() {
+        return commentRepository.findAllByDeleteStatusFalse();
+    }
+
+    // Get comment by ID
+    public Optional<Comment> getCommentById(String id) {
+        return commentRepository.findByIdAndDeleteStatusFalse(id);
+    }
+
+    // Get comments by post ID
+    public List<Comment> getCommentsByPostId(String postId) {
+        return commentRepository.findByCommentedOnIdAndDeleteStatusFalse(postId);
+    }
+
+    // Get comments by user ID
+    public List<Comment> getCommentsByUserId(String userId) {
+        return commentRepository.findByCommentedByIdAndDeleteStatusFalse(userId);
+    }  
 
     // Create comment
     public Comment createComment(String commentText, String postId, String userId) {
@@ -36,7 +56,6 @@ public class CommentService {
             comment.setComment(commentText);
             comment.setCommentedAt(new Date());
             comment.setCommentedBy(userOptional.get());
-            comment.setDeleteStatus(false);
 
            
             return commentRepository.save(comment);
