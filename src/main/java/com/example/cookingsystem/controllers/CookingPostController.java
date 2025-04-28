@@ -39,6 +39,7 @@ public class CookingPostController {
     }
 
     // Get posts by current user
+    
     @GetMapping("/my-posts/{userId}")
     public ResponseEntity<List<CookingPost>> getMyPosts(@PathVariable String userId) {
 
@@ -76,7 +77,9 @@ public class CookingPostController {
             }
         }
 
-        
+
+
+
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
