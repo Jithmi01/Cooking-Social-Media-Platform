@@ -79,6 +79,8 @@ public class CookingPostService {
     }
 
     // Increment like count
+
+    
     public boolean incrementLikeCount(String postId) {
         return cookingPostRepository.findById(postId).map(post -> {
             post.setLikeCount(post.getLikeCount() + 1);
