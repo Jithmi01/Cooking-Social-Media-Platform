@@ -5,30 +5,32 @@ package com.example.cookingsystem.dtos;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.data.mongodb.core.aggregation.MergeOperation.UniqueMergeId.id;
-
 public class CookingPostDTO {
+    private String id;
     private String title;
     private String description;
     private Date createdAt;
     private int likeCount;
+    private boolean deleteStatus;
     private String createdBy;
     private List<String> mediaIds;
     private List<String> commentIds;
     private List<String> likeIds;
-
 
     // Default constructor
     public CookingPostDTO() {
     }
 
     // Overloaded constructor
-    public CookingPostDTO(String title, String description, Date createdAt, int likeCount, String createdBy, List<String> mediaIds,
-    List<String> commentIds, List<String> likeIds) {
+    public CookingPostDTO(String id, String title, String description, Date createdAt, int likeCount,
+                          boolean deleteStatus, String createdBy, List<String> mediaIds,
+                          List<String> commentIds, List<String> likeIds) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
         this.likeCount = likeCount;
+        this.deleteStatus = deleteStatus;
         this.createdBy = createdBy;
         this.mediaIds = mediaIds;
         this.commentIds = commentIds;
@@ -115,5 +117,4 @@ public class CookingPostDTO {
     public void setLikeIds(List<String> likeIds) {
         this.likeIds = likeIds;
     }
-
 }

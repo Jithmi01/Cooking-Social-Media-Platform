@@ -1,24 +1,19 @@
 package com.example.cookingsystem.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.cookingsystem.dtos.CookingPostDTO;
 import com.example.cookingsystem.models.CookingPost;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.services.CookingPostService;
 import com.example.cookingsystem.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -32,6 +27,7 @@ public class CookingPostController {
         this.cookingPostService = cookingPostService;
         this.userService =userService;
     }
+
     // Get all posts
     @GetMapping
     public ResponseEntity<List<CookingPost>> getAllPosts() {
@@ -40,7 +36,6 @@ public class CookingPostController {
     }
 
     // Get posts by current user
-
     @GetMapping("/my-posts/{userId}")
     public ResponseEntity<List<CookingPost>> getMyPosts(@PathVariable String userId) {
 
@@ -49,7 +44,6 @@ public class CookingPostController {
     }
 
     // Get post by ID
-    
     @GetMapping("/{id}")
     public ResponseEntity<CookingPost> getPostById(@PathVariable String id) {
         Optional<CookingPost> post = cookingPostService.getPostById(id);
@@ -57,8 +51,6 @@ public class CookingPostController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-
-   
     // Create new post
     @PostMapping
     public ResponseEntity<CookingPost> createPost(@RequestBody CookingPostDTO postDto
@@ -78,10 +70,6 @@ public class CookingPostController {
                 return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
             }
         }
-
-
-
-
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -107,13 +95,30 @@ public class CookingPostController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Delete post (soft delete)
-    public boolean deletePost(String id) {
-        return cookingPostRepository.findById(id).map(post -> {
-            post.setDeleteStatus(true);
-            cookingPostRepository.save(post);
-            return true;
-        }).orElse(false);
+    // Delete post
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable String id) {
+        if (cookingPostService.deletePost(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    // Like a post
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable String id) {
+        if (cookingPostService.incrementLikeCount(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Unlike a post
+    @PostMapping("/{id}/unlike")
+    public ResponseEntity<Void> unlikePost(@PathVariable String id) {
+        if (cookingPostService.decrementLikeCount(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
