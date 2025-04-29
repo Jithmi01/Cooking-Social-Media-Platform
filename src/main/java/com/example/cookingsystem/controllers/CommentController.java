@@ -2,8 +2,10 @@ package com.example.cookingsystem.controllers;
 
 import com.example.cookingsystem.dtos.CommentDto;
 import com.example.cookingsystem.models.Comment;
+import com.example.cookingsystem.models.CookingPost;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.services.CommentService;
+import com.example.cookingsystem.services.CookingPostService;
 import com.example.cookingsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +22,14 @@ import java.util.Optional;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CookingPostService postService;
     private final UserService userService;
 
     @Autowired
-    public CommentController(CommentService commentService,UserService userService) {
+    public CommentController(CommentService commentService,CookingPostService postService,UserService userService) {
         this.commentService = commentService;
         this.userService = userService;
+        this.postService = postService;
     }
 
     // Get all comments
@@ -64,7 +68,9 @@ public class CommentController {
             @RequestBody CommentDto commentDto,
             @PathVariable String postId
             ) {
-        {
+        Optional<User> user = userService.getUserById(commentDto.getCommentedBy());
+        Optional<CookingPost> post = postService.getPostById(postId);
+        if(user.isPresent() && post.isPresent()){
 
             Comment createdComment = commentService.createComment(commentDto.getComment(), postId, user.get().getId());
 

@@ -1,8 +1,10 @@
 package com.example.cookingsystem.services;
 
 import com.example.cookingsystem.models.Comment;
+import com.example.cookingsystem.models.CookingPost;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.repositories.CommentRepository;
+import com.example.cookingsystem.repositories.CookingPostRepository;
 import com.example.cookingsystem.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,16 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final CookingPostRepository cookingPostRepository;
 
 
     @Autowired
     public CommentService(CommentRepository commentRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          CookingPostRepository cookingPostRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-
+        this.cookingPostRepository = cookingPostRepository;
     }
 
     // Get all comments
@@ -49,16 +53,17 @@ public class CommentService {
     // Create comment
     public Comment createComment(String commentText, String postId, String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
+        Optional<CookingPost> postOptional = cookingPostRepository.findById(postId);
 
         if (userOptional.isPresent() && postOptional.isPresent()) {
             Comment comment = new Comment();
             comment.setComment(commentText);
             comment.setCommentedAt(new Date());
             comment.setCommentedBy(userOptional.get());
+            comment.setCommentedOn(postOptional.get());
             comment.setDeleteStatus(false);
 
-           
-
+            
             return commentRepository.save(comment);
         }
         return null;

@@ -1,8 +1,11 @@
 package com.example.cookingsystem.services;
 
+import com.example.cookingsystem.dtos.LikeStatusDTO;
 import com.example.cookingsystem.models.Like;
+import com.example.cookingsystem.models.CookingPost;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.repositories.LikeRepository;
+import com.example.cookingsystem.repositories.CookingPostRepository;
 import com.example.cookingsystem.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +20,19 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
-
+    private final CookingPostRepository cookingPostRepository;
+    private final CookingPostService cookingPostService;
 
 
     @Autowired
     public LikeService(LikeRepository likeRepository,
                        UserRepository userRepository,
-                       {
+                       CookingPostRepository cookingPostRepository,
+                       CookingPostService cookingPostService) {
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
-
+        this.cookingPostRepository = cookingPostRepository;
+        this.cookingPostService = cookingPostService;
     }
 
     // Get all likes
@@ -59,6 +65,7 @@ public class LikeService {
     // Create like
     public Like createLike(String postId, String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
+        Optional<CookingPost> postOptional = cookingPostRepository.findById(postId);
 
         if (userOptional.isPresent() && postOptional.isPresent()) {
             // Check if like already exists
@@ -69,7 +76,10 @@ public class LikeService {
             Like like = new Like();
             like.setLikedAt(new Date());
             like.setLikedBy(userOptional.get());
+            like.setLikedPost(postOptional.get());
+            like.setDeleteStatus(false);
 
+            // Increment like count on post
             
 
             return likeRepository.save(like);
@@ -77,5 +87,30 @@ public class LikeService {
         return null;
     }
 
+    // Unlike (soft delete)
+    public boolean unlike(String userId, String postId) {
+        Optional<Like> likeOptional = likeRepository.findByLikedByIdAndLikedPostIdAndDeleteStatusFalse(userId, postId);
+        if (likeOptional.isPresent()) {
+            Like like = likeOptional.get();
+            like.setDeleteStatus(true);
+            likeRepository.save(like);
 
+            // Decrement like count on post
+            cookingPostService.decrementLikeCount(postId);
+            return true;
+        }
+        return false;
+    }
+
+    // Delete like (admin function)
+    public boolean deleteLike(String id) {
+        return likeRepository.findById(id).map(like -> {
+            like.setDeleteStatus(true);
+            likeRepository.save(like);
+
+            // Decrement like count on post
+            cookingPostService.decrementLikeCount(like.getLikedPost().getId());
+            return true;
+        }).orElse(false);
+    }
 }
