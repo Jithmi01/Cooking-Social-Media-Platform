@@ -107,6 +107,28 @@ public class GroupPostService {
 
         return mapPostToResponseDTO(savedPost);
     }
+    /**
+     * Update a group post
+     */
+    @Transactional
+    public GroupPostDTO.GroupPostResponse updateGroupPost(String postId, GroupPostDTO.GroupPostRequest postRequest, String userId) {
+        GroupPost post = findGroupPostById(postId);
+
+        // Verify the current user is the post author
+        if (!post.getPostedBy().getId().equals(userId)) {
+            throw new IllegalArgumentException("Only the post author can update this post");
+        }
+
+        // Update post fields
+        post.setTitle(postRequest.getTitle());
+        post.setDescription(postRequest.getDescription());
+        post.setMediaUrl(postRequest.getMediaUrl());
+
+        // Save the updated post
+        GroupPost updatedPost = groupPostRepository.save(post);
+
+        return mapPostToResponseDTO(updatedPost);
+    }
 
     
 }
