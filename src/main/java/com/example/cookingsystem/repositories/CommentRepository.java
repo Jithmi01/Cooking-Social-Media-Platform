@@ -10,7 +10,8 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends MongoRepository<Comment, String> {
     List<Comment> findByCommentedOnIdAndDeleteStatusFalse(String postId);
-    List<Comment> findAllByDeleteStatusFalse();
     Optional<Comment> findByIdAndDeleteStatusFalse(String id);
     List<Comment> findByCommentedByIdAndDeleteStatusFalse(String userId);
+    List<Comment> findAllByDeleteStatusFalse();
+
 }
