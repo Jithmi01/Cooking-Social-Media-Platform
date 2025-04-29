@@ -1,6 +1,7 @@
 package com.example.cookingsystem.controllers;
 
 import com.example.cookingsystem.dtos.LikeDTO;
+import com.example.cookingsystem.dtos.LikeStatusDTO;
 import com.example.cookingsystem.models.Like;
 import com.example.cookingsystem.services.LikeService;
 
@@ -82,6 +83,13 @@ public class LikeController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-
+        // Delete like (admin function)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLike(@PathVariable String id) {
+        if (likeService.deleteLike(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 }
