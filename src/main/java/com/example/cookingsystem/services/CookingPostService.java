@@ -58,5 +58,14 @@ public class CookingPostService {
         return null;
     }
 
+    // Update post
+    public CookingPost updatePost(String id, CookingPost postDetails) {
+        return cookingPostRepository.findById(id).map(post -> {
+            post.setTitle(postDetails.getTitle());
+            post.setDescription(postDetails.getDescription());
+            return cookingPostRepository.save(post);
+        }).orElse(null);
+    }
+
     
 }
