@@ -1,11 +1,15 @@
 package com.example.cookingsystem.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +32,31 @@ public class CookingPostController {
         this.cookingPostService = cookingPostService;
         this.userService =userService;
     }
+    // Get all posts
+    @GetMapping
+    public ResponseEntity<List<CookingPost>> getAllPosts() {
+        List<CookingPost> posts = cookingPostService.getAllPosts();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    // Get posts by current user
+
+    @GetMapping("/my-posts/{userId}")
+    public ResponseEntity<List<CookingPost>> getMyPosts(@PathVariable String userId) {
+
+        List<CookingPost> posts = cookingPostService.getPostsByUser(userId);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    // Get post by ID
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<CookingPost> getPostById(@PathVariable String id) {
+        Optional<CookingPost> post = cookingPostService.getPostById(id);
+        return post.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
    
     // Create new post
@@ -50,7 +79,32 @@ public class CookingPostController {
             }
         }
 
+
+
+
+
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Update post
+    @PutMapping("/{id}")
+    public ResponseEntity<CookingPost> updatePost(@PathVariable String id,
+                                                  @RequestBody CookingPostDTO postDetailsDTO) {
+        Optional<User> user = userService.getUserById(postDetailsDTO.getCreatedBy());
+        if(user.isPresent()){
+            CookingPost post  =new CookingPost();
+            post.setCreatedBy(user.get());
+            post.setDescription(postDetailsDTO.getDescription());
+            post.setTitle(postDetailsDTO.getTitle());
+            post.setCreatedAt(postDetailsDTO.getCreatedAt());
+            post.setLikeCount(postDetailsDTO.getLikeCount());
+            post.setDeleteStatus(false);
+            CookingPost updatedPost = cookingPostService.updatePost(id, post);
+            if (updatedPost != null) {
+                return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
