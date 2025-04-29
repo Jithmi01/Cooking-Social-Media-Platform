@@ -1,10 +1,9 @@
 package com.example.cookingsystem.models;
 
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.Date;
 
 @Document(collection = "group_posts")
 public class GroupPost {
@@ -34,6 +33,8 @@ public class GroupPost {
         this.title = title;
         this.description = description;
         this.mediaUrl = mediaUrl;
+
+
         this.deleteStatus = deleteStatus;
         this.postedBy = postedBy;
         this.postedOn = postedOn;

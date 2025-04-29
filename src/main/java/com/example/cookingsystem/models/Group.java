@@ -11,6 +11,9 @@ public class Group {
     private String id;
     private String name;
     private String description;
+//    created By user Id
+
+
     private boolean deleteStatus;
 
     @DBRef(lazy = true)
