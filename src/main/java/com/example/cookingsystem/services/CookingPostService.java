@@ -60,7 +60,7 @@ public class CookingPostService {
 
     // Update post
 
-    
+
     public CookingPost updatePost(String id, CookingPost postDetails) {
         return cookingPostRepository.findById(id).map(post -> {
             post.setTitle(postDetails.getTitle());
@@ -68,6 +68,16 @@ public class CookingPostService {
             return cookingPostRepository.save(post);
         }).orElse(null);
     }
+
+    // Delete post (soft delete)
+    public boolean deletePost(String id) {
+        return cookingPostRepository.findById(id).map(post -> {
+            post.setDeleteStatus(true);
+            cookingPostRepository.save(post);
+            return true;
+        }).orElse(false);
+    }
+
 
     
 }
