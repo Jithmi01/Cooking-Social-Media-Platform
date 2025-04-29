@@ -39,5 +39,36 @@ public class GroupPostService {
         List<GroupPost> posts = groupPostRepository.findByDeleteStatusFalseOrderByCreatedAtDesc();
         return mapPostsToResponseDTOs(posts);
     }
+    /**
+     * Get group post by ID
+     */
+    public GroupPostDTO.GroupPostResponse getGroupPostById(String postId) {
+        GroupPost post = findGroupPostById(postId);
+        return mapPostToResponseDTO(post);
+    }
+
+    /**
+     * Get posts by group ID
+     */
+    public List<GroupPostDTO.GroupPostResponse> getPostsByGroupId(String groupId) {
+        // Verify group exists
+        groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group not found with ID: " + groupId));
+
+        List<GroupPost> posts = groupPostRepository.findByPostedOnIdAndDeleteStatusFalseOrderByCreatedAtDesc(groupId);
+        return mapPostsToResponseDTOs(posts);
+    }
+
+    /**
+     * Get posts by user ID
+     */
+    public List<GroupPostDTO.GroupPostResponse> getPostsByUserId(String userId) {
+        // Verify user exists
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+
+        List<GroupPost> posts = groupPostRepository.findByPostedByIdAndDeleteStatusFalseOrderByCreatedAtDesc(userId);
+        return mapPostsToResponseDTOs(posts);
+    }
     
 }
