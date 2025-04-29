@@ -77,6 +77,19 @@ public class LikeService {
         return null;
     }
 
+        // Unlike (soft delete)
+        public boolean unlike(String userId, String postId) {
+            Optional<Like> likeOptional = likeRepository.findByLikedByIdAndLikedPostIdAndDeleteStatusFalse(userId, postId);
+            if (likeOptional.isPresent()) {
+                Like like = likeOptional.get();
+                like.setDeleteStatus(true);
+                likeRepository.save(like);
+    
+
+            }
+            return false;
+        }
+
         // Delete like (admin function)
         public boolean deleteLike(String id) {
             return likeRepository.findById(id).map(like -> {

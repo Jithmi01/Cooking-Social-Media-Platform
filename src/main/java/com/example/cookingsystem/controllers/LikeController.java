@@ -83,6 +83,17 @@ public class LikeController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+        // Unlike a post
+        @DeleteMapping("/post/{postId}")
+        public ResponseEntity<Void> unlikePost(@PathVariable String postId,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+            String userId = userDetails.getUsername();
+            if (likeService.unlike(userId, postId)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         // Delete like (admin function)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLike(@PathVariable String id) {
