@@ -1,21 +1,31 @@
-package com.example.cookingsystem.dtos;
+package com.example.cookingsystem.models;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-public class TaskCompletionDto {
+@Document(collection = "task_completions")
+public class TaskCompletion {
+    @Id
     private String id;
     private Date completedAt;
-    private int spentTime;
+    private int spentTime; // in minutes
     private boolean deleteStatus;
-    private String task;         // Task ID or name
-    private String completedBy;  // User ID or username
+
+    @DBRef(lazy = true)
+    private Task task;
+
+    @DBRef(lazy = true)
+    private User completedBy;
 
     // Default constructor
-    public TaskCompletionDto() {
+    public TaskCompletion() {
     }
 
     // Overloaded constructor
-    public TaskCompletionDto(String id, Date completedAt, int spentTime, boolean deleteStatus, String task, String completedBy) {
+    public TaskCompletion(String id, Date completedAt, int spentTime, boolean deleteStatus, Task task, User completedBy) {
         this.id = id;
         this.completedAt = completedAt;
         this.spentTime = spentTime;
@@ -58,19 +68,19 @@ public class TaskCompletionDto {
         this.deleteStatus = deleteStatus;
     }
 
-    public String getTask() {
+    public Task getTask() {
         return task;
     }
 
-    public void setTask(String task) {
+    public void setTask(Task task) {
         this.task = task;
     }
 
-    public String getCompletedBy() {
+    public User getCompletedBy() {
         return completedBy;
     }
 
-    public void setCompletedBy(String completedBy) {
+    public void setCompletedBy(User completedBy) {
         this.completedBy = completedBy;
     }
 }
