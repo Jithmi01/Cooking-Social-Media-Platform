@@ -59,6 +59,8 @@ public class CookingPostService {
     }
 
     // Update post
+
+    
     public CookingPost updatePost(String id, CookingPost postDetails) {
         return cookingPostRepository.findById(id).map(post -> {
             post.setTitle(postDetails.getTitle());
