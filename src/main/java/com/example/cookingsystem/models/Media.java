@@ -1,18 +1,26 @@
-package com.example.cookingsystem.dtos;
+package com.example.cookingsystem.models;
 
-public class MediaDTO {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "media")
+public class Media {
+    @Id
     private String id;
-    private String type;
+    private String type; // image, video, etc.
     private String url;
     private boolean deleteStatus;
-    private String relatedPost;
+
+    @DBRef(lazy = true)
+    private CookingPost relatedPost;
 
     // Default constructor
-    public MediaDTO() {
+    public Media() {
     }
 
     // Overloaded constructor
-    public MediaDTO(String id, String type, String url, boolean deleteStatus, String relatedPost) {
+    public Media(String id, String type, String url, boolean deleteStatus, CookingPost relatedPost) {
         this.id = id;
         this.type = type;
         this.url = url;
@@ -54,11 +62,11 @@ public class MediaDTO {
         this.deleteStatus = deleteStatus;
     }
 
-    public String getRelatedPost() {
+    public CookingPost getRelatedPost() {
         return relatedPost;
     }
 
-    public void setRelatedPost(String relatedPost) {
+    public void setRelatedPost(CookingPost relatedPost) {
         this.relatedPost = relatedPost;
     }
 }
