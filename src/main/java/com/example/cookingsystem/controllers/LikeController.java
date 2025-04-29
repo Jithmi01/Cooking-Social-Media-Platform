@@ -4,16 +4,15 @@ import com.example.cookingsystem.dtos.LikeDTO;
 import com.example.cookingsystem.dtos.LikeStatusDTO;
 import com.example.cookingsystem.models.Like;
 import com.example.cookingsystem.services.LikeService;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/likes")
@@ -25,7 +24,6 @@ public class LikeController {
     public LikeController(LikeService likeService) {
         this.likeService = likeService;
     }
-
 
     // Get all likes
     @GetMapping
@@ -70,6 +68,7 @@ public class LikeController {
         }
         return new ResponseEntity<>(likeStatusDTO, HttpStatus.OK);
     }
+
     // Like a post
     @PostMapping("/post/{postId}")
     public ResponseEntity<Like> likePost(@RequestBody LikeDTO liekDTO
@@ -83,18 +82,18 @@ public class LikeController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-        // Unlike a post
-        @DeleteMapping("/post/{postId}")
-        public ResponseEntity<Void> unlikePost(@PathVariable String postId,
-                                               @AuthenticationPrincipal UserDetails userDetails) {
-            String userId = userDetails.getUsername();
-            if (likeService.unlike(userId, postId)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // Unlike a post
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<Void> unlikePost(@PathVariable String postId,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        if (likeService.unlike(userId, postId)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-        // Delete like (admin function)
+    // Delete like (admin function)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLike(@PathVariable String id) {
         if (likeService.deleteLike(id)) {
@@ -102,5 +101,4 @@ public class LikeController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }
