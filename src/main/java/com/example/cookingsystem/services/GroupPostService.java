@@ -70,5 +70,43 @@ public class GroupPostService {
         List<GroupPost> posts = groupPostRepository.findByPostedByIdAndDeleteStatusFalseOrderByCreatedAtDesc(userId);
         return mapPostsToResponseDTOs(posts);
     }
+
+    /**
+     * Create a new group post
+     */
+
+    @Transactional
+    public GroupPostDTO.GroupPostResponse createGroupPost(GroupPostDTO.GroupPostRequest postRequest, String userId) {
+        // Get user and group
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+
+        Group group = groupRepository.findById(postRequest.getGroupId())
+                .orElseThrow(() -> new ResourceNotFoundException("Group not found with ID: " + postRequest.getGroupId()));
+
+        // Verify user is a member of the group
+        boolean isMember = group.getMembers().stream()
+                .anyMatch(member -> member.getId().equals(userId));
+
+        if (!isMember) {
+            throw new IllegalArgumentException("User is not a member of this group");
+        }
+
+        // Create new post
+        GroupPost post = new GroupPost();
+        post.setTitle(postRequest.getTitle());
+        post.setDescription(postRequest.getDescription());
+        post.setMediaUrl(postRequest.getMediaUrl());
+        post.setDeleteStatus(false);
+        post.setCreatedAt(new Date());
+        post.setPostedBy(user);
+        post.setPostedOn(group);
+
+        // Save the post
+        GroupPost savedPost = groupPostRepository.save(post);
+
+        return mapPostToResponseDTO(savedPost);
+    }
+
     
 }
