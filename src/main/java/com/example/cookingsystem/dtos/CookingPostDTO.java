@@ -5,6 +5,8 @@ package com.example.cookingsystem.dtos;
 import java.util.Date;
 import java.util.List;
 
+import static org.springframework.data.mongodb.core.aggregation.MergeOperation.UniqueMergeId.id;
+
 public class CookingPostDTO {
     private String title;
     private String description;
@@ -34,6 +36,14 @@ public class CookingPostDTO {
     }
 
     // Getters and setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -66,13 +76,44 @@ public class CookingPostDTO {
         this.likeCount = likeCount;
     }
 
+    public boolean isDeleteStatus() {
+        return deleteStatus;
+    }
+
+    public void setDeleteStatus(boolean deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
 
-    
-
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
+
+    public List<String> getMediaIds() {
+        return mediaIds;
+    }
+
+    public void setMediaIds(List<String> mediaIds) {
+        this.mediaIds = mediaIds;
+    }
+
+    public List<String> getCommentIds() {
+        return commentIds;
+    }
+
+    public void setCommentIds(List<String> commentIds) {
+        this.commentIds = commentIds;
+    }
+
+    public List<String> getLikeIds() {
+        return likeIds;
+    }
+
+    public void setLikeIds(List<String> likeIds) {
+        this.likeIds = likeIds;
+    }
+
 }
