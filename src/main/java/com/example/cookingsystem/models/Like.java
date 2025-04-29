@@ -68,7 +68,11 @@ public class Like {
         this.likedBy = likedBy;
     }
 
- 
+    public CookingPost getLikedPost() {
+        return likedPost;
+    }
 
-
+    public void setLikedPost(CookingPost likedPost) {
+        this.likedPost = likedPost;
+    }
 }
