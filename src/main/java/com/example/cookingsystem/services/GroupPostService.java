@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Service
 public class GroupPostService {
 
     private final GroupPostRepository groupPostRepository;
@@ -39,6 +39,7 @@ public class GroupPostService {
         List<GroupPost> posts = groupPostRepository.findByDeleteStatusFalseOrderByCreatedAtDesc();
         return mapPostsToResponseDTOs(posts);
     }
+
     /**
      * Get group post by ID
      */
@@ -74,7 +75,6 @@ public class GroupPostService {
     /**
      * Create a new group post
      */
-
     @Transactional
     public GroupPostDTO.GroupPostResponse createGroupPost(GroupPostDTO.GroupPostRequest postRequest, String userId) {
         // Get user and group
@@ -107,6 +107,7 @@ public class GroupPostService {
 
         return mapPostToResponseDTO(savedPost);
     }
+
     /**
      * Update a group post
      */
@@ -130,5 +131,48 @@ public class GroupPostService {
         return mapPostToResponseDTO(updatedPost);
     }
 
-    
+    /**
+     * Delete a group post (soft delete)
+     */
+    @Transactional
+    public void deleteGroupPost(String postId, String userId) {
+        GroupPost post = findGroupPostById(postId);
+
+        // Check if user is the post author or a group admin
+        if (!post.getPostedBy().getId().equals(userId)) {
+            throw new IllegalArgumentException("Only the post author can delete this post");
+        }
+
+        // Soft delete the post
+        post.setDeleteStatus(true);
+        groupPostRepository.save(post);
+    }
+
+    // Helper methods
+    private GroupPost findGroupPostById(String postId) {
+        GroupPost post = groupPostRepository.findByIdAndDeleteStatusFalse(postId);
+        if (post == null) {
+            throw new ResourceNotFoundException("Group post not found with ID: " + postId);
+        }
+        return post;
+    }
+
+    private GroupPostDTO.GroupPostResponse mapPostToResponseDTO(GroupPost post) {
+        GroupPostDTO.GroupPostResponse response = new GroupPostDTO.GroupPostResponse();
+        response.setId(post.getId());
+        response.setTitle(post.getTitle());
+        response.setDescription(post.getDescription());
+        response.setMediaUrl(post.getMediaUrl());
+        response.setCreatedAt(post.getCreatedAt());
+        response.setPostedBy(new GroupPostDTO.UserSummaryDTO(post.getPostedBy()));
+        response.setPostedOn(new GroupPostDTO.GroupSummaryDTO(post.getPostedOn()));
+
+        return response;
+    }
+
+    private List<GroupPostDTO.GroupPostResponse> mapPostsToResponseDTOs(List<GroupPost> posts) {
+        return posts.stream()
+                .map(this::mapPostToResponseDTO)
+                .collect(Collectors.toList());
+    }
 }
