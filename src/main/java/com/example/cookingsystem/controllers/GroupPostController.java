@@ -1,13 +1,22 @@
 package com.example.cookingsystem.controllers;
 
-import com.example.cookingsystem.dtos.GroupPostDTO;
-import com.example.cookingsystem.services.GroupPostService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.cookingsystem.dtos.GroupPostDTO;
+import com.example.cookingsystem.services.GroupPostService;
 
 @RestController
 @RequestMapping("/api/group-posts")
@@ -55,10 +64,10 @@ public class GroupPostController {
         List<GroupPostDTO.GroupPostResponse> posts = groupPostService.getPostsByUserId(userId);
         return ResponseEntity.ok(posts);
     }
+
     /**
      * Create a new group post
      */
-    
     @PostMapping
     public ResponseEntity<GroupPostDTO.GroupPostResponse> createGroupPost(
             @RequestBody GroupPostDTO.GroupPostRequest postRequest,
@@ -66,6 +75,7 @@ public class GroupPostController {
         GroupPostDTO.GroupPostResponse createdPost = groupPostService.createGroupPost(postRequest, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
+
     /**
      * Update an existing group post
      */
@@ -77,6 +87,7 @@ public class GroupPostController {
         GroupPostDTO.GroupPostResponse updatedPost = groupPostService.updateGroupPost(postId, postRequest, userId);
         return ResponseEntity.ok(updatedPost);
     }
+
     /**
      * Delete a group post (soft delete)
      */
@@ -87,6 +98,4 @@ public class GroupPostController {
         groupPostService.deleteGroupPost(postId, userId);
         return ResponseEntity.noContent().build();
     }
-
-   
 }
