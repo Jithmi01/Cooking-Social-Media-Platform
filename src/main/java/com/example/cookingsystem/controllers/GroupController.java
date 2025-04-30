@@ -1,13 +1,21 @@
 package com.example.cookingsystem.controllers;
 
-import com.example.cookingsystem.dtos.GroupDTO;
-import com.example.cookingsystem.services.GroupService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.cookingsystem.dtos.GroupDTO;
+import com.example.cookingsystem.services.GroupService;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -48,7 +56,7 @@ public class GroupController {
     }
 
     /**
-     * Create a new group
+     * Create a new group Create a new group(name,description,createdByUserId)
      */
     @PostMapping
     public ResponseEntity<GroupDTO.GroupResponse> createGroup(@RequestBody GroupDTO.GroupRequest groupRequest) {
@@ -89,6 +97,9 @@ public class GroupController {
 
     /**
      * Add multiple users to a group
+     * {
+     *   "userIds": ["680c5a725ca9ad6a757134c7", "680c60145ca9ad6a757134c8"]
+     * }
      */
     @PostMapping("/{groupId}/members")
     public ResponseEntity<GroupDTO.GroupResponse> addUsersToGroup(

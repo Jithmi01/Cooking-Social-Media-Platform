@@ -1,15 +1,23 @@
 package com.example.cookingsystem.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.cookingsystem.dtos.CreateUserDto;
 import com.example.cookingsystem.dtos.LoginDTO;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -37,7 +45,7 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Create user
+    // Create user Create user(name,username,email,password,gender,isPublic,badge)
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
         // Convert DTO to User entity
