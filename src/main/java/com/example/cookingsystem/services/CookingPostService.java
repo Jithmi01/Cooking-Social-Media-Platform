@@ -1,16 +1,15 @@
 package com.example.cookingsystem.services;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.cookingsystem.models.CookingPost;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.repositories.CookingPostRepository;
 import com.example.cookingsystem.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CookingPostService {
@@ -23,6 +22,7 @@ public class CookingPostService {
         this.cookingPostRepository = cookingPostRepository;
         this.userRepository = userRepository;
     }
+
     // Get all posts
     public List<CookingPost> getAllPosts() {
         return cookingPostRepository.findAllByDeleteStatusFalse();
@@ -37,8 +37,6 @@ public class CookingPostService {
     public Optional<CookingPost> getPostById(String id) {
         return cookingPostRepository.findByIdAndDeleteStatusFalse(id);
     }
-
-
 
     // Create post
     public CookingPost createPost(CookingPost post, String userId) {
@@ -59,8 +57,6 @@ public class CookingPostService {
     }
 
     // Update post
-
-
     public CookingPost updatePost(String id, CookingPost postDetails) {
         return cookingPostRepository.findById(id).map(post -> {
             post.setTitle(postDetails.getTitle());
@@ -79,8 +75,6 @@ public class CookingPostService {
     }
 
     // Increment like count
-
-    
     public boolean incrementLikeCount(String postId) {
         return cookingPostRepository.findById(postId).map(post -> {
             post.setLikeCount(post.getLikeCount() + 1);
@@ -99,7 +93,4 @@ public class CookingPostService {
             return true;
         }).orElse(false);
     }
-
-
-    
 }

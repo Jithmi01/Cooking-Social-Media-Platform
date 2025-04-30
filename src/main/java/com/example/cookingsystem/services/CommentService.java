@@ -2,6 +2,7 @@ package com.example.cookingsystem.services;
 
 import com.example.cookingsystem.models.Comment;
 import com.example.cookingsystem.models.CookingPost;
+import com.example.cookingsystem.models.Notification;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.repositories.CommentRepository;
 import com.example.cookingsystem.repositories.CookingPostRepository;
@@ -20,14 +21,16 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CookingPostRepository cookingPostRepository;
 
+    private final NotificationService notificationService;
 
     @Autowired
     public CommentService(CommentRepository commentRepository,
                           UserRepository userRepository,
-                          CookingPostRepository cookingPostRepository) {
+                          CookingPostRepository cookingPostRepository,NotificationService notifcationService) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.cookingPostRepository = cookingPostRepository;
+        this.notificationService = notifcationService;
     }
 
     // Get all comments
@@ -58,12 +61,11 @@ public class CommentService {
         if (userOptional.isPresent() && postOptional.isPresent()) {
             Comment comment = new Comment();
             comment.setComment(commentText);
-            comment.setCommentedAt(new Date());
             comment.setCommentedBy(userOptional.get());
             comment.setCommentedOn(postOptional.get());
             comment.setDeleteStatus(false);
 
-
+           
 
             return commentRepository.save(comment);
         }

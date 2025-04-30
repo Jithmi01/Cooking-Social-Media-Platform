@@ -55,14 +55,14 @@ public class CommentController {
     }
 
     // Get comments by current user
-    @GetMapping("/my-comments")
-    public ResponseEntity<List<Comment>> getMyComments(@AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        List<Comment> comments = commentService.getCommentsByUserId(userId);
-        return new ResponseEntity<>(comments, HttpStatus.OK);
-    }
+    // @GetMapping("/my-comments")
+    // public ResponseEntity<List<Comment>> getMyComments(@AuthenticationPrincipal UserDetails userDetails) {
+    //     String userId = userDetails.getUsername();
+    //     List<Comment> comments = commentService.getCommentsByUserId(userId);
+    //     return new ResponseEntity<>(comments, HttpStatus.OK);
+    // }
 
-    // Create comment
+    // Create comment 
     @PostMapping("/post/{postId}")
     public ResponseEntity<Comment> createComment(
             @RequestBody CommentDto commentDto,
@@ -80,6 +80,13 @@ public class CommentController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
+    // {
+    //     "comment": "woww!",
+    //     "commentedBy": "68113911060b9c32181e7964"
+    //   }
+      
 
     // Update comment
     @PutMapping("/{id}")

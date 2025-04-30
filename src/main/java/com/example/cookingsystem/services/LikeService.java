@@ -3,6 +3,7 @@ package com.example.cookingsystem.services;
 import com.example.cookingsystem.dtos.LikeStatusDTO;
 import com.example.cookingsystem.models.Like;
 import com.example.cookingsystem.models.CookingPost;
+import com.example.cookingsystem.models.Notification;
 import com.example.cookingsystem.models.User;
 import com.example.cookingsystem.repositories.LikeRepository;
 import com.example.cookingsystem.repositories.CookingPostRepository;
@@ -23,16 +24,18 @@ public class LikeService {
     private final CookingPostRepository cookingPostRepository;
     private final CookingPostService cookingPostService;
 
+    private final NotificationService notificationService;
 
     @Autowired
     public LikeService(LikeRepository likeRepository,
                        UserRepository userRepository,
                        CookingPostRepository cookingPostRepository,
-                       CookingPostService cookingPostService) {
+                       CookingPostService cookingPostService,NotificationService notificationService) {
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
         this.cookingPostRepository = cookingPostRepository;
         this.cookingPostService = cookingPostService;
+        this.notificationService = notificationService;
     }
 
     // Get all likes
@@ -79,8 +82,7 @@ public class LikeService {
             like.setLikedPost(postOptional.get());
             like.setDeleteStatus(false);
 
-            // Increment like count on post
-            
+           
 
             return likeRepository.save(like);
         }

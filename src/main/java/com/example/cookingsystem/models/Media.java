@@ -3,30 +3,29 @@ package com.example.cookingsystem.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.List;
 
-@Document(collection = "groups")
-public class Group {
+@Document(collection = "media")
+public class Media {
     @Id
     private String id;
-    private String name;
-    private String description;
+    private String type; // image, video, etc.
+    private String url;
     private boolean deleteStatus;
 
     @DBRef(lazy = true)
-    private List<User> members;
+    private CookingPost relatedPost;
 
     // Default constructor
-    public Group() {
+    public Media() {
     }
 
     // Overloaded constructor
-    public Group(String id, String name, String description, boolean deleteStatus, List<User> members) {
+    public Media(String id, String type, String url, boolean deleteStatus, CookingPost relatedPost) {
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.type = type;
+        this.url = url;
         this.deleteStatus = deleteStatus;
-        this.members = members;
+        this.relatedPost = relatedPost;
     }
 
     // Getters and setters
@@ -39,20 +38,20 @@ public class Group {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getDescription() {
-        return description;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public boolean isDeleteStatus() {
@@ -63,11 +62,11 @@ public class Group {
         this.deleteStatus = deleteStatus;
     }
 
-    public List<User> getMembers() {
-        return members;
+    public CookingPost getRelatedPost() {
+        return relatedPost;
     }
 
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public void setRelatedPost(CookingPost relatedPost) {
+        this.relatedPost = relatedPost;
     }
 }

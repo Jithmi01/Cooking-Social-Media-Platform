@@ -33,8 +33,6 @@ public class GroupPost {
         this.title = title;
         this.description = description;
         this.mediaUrl = mediaUrl;
-
-
         this.deleteStatus = deleteStatus;
         this.postedBy = postedBy;
         this.postedOn = postedOn;

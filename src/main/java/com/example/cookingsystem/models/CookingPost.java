@@ -1,15 +1,13 @@
 package com.example.cookingsystem.models;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.print.attribute.standard.Media;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.List;
 
 @Document(collection = "cooking_posts")
 public class CookingPost {
@@ -136,11 +134,4 @@ public class CookingPost {
     public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
-
-    private static class Like {
-
-        public Like() {
-        }
-    }
 }
-

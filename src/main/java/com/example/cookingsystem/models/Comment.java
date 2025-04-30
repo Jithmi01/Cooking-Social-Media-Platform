@@ -1,39 +1,38 @@
 package com.example.cookingsystem.models;
 
-import java.util.Date;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
 
 @Document(collection = "comments")
 public class Comment {
     @Id
     private String id;
     private String comment;
-    private Date commentedAt;
     private boolean deleteStatus;
 
     @DBRef(lazy = true)
     @JsonSerialize(using = UserSerializer.class)
     private User commentedBy;
 
-    
+    @DBRef(lazy = true)
+    private CookingPost commentedOn;
+
     // Default constructor
     public Comment() {
     }
 
     // Overloaded constructor
-    public Comment(String id, String comment, Date commentedAt, boolean deleteStatus,
-                   User commentedBy) {
+    public Comment(String id, String comment, boolean deleteStatus,
+                   User commentedBy, CookingPost commentedOn) {
         this.id = id;
         this.comment = comment;
-        this.commentedAt = commentedAt;
         this.deleteStatus = deleteStatus;
         this.commentedBy = commentedBy;
-        
+        this.commentedOn = commentedOn;
     }
 
     // Getters and setters
@@ -54,13 +53,7 @@ public class Comment {
         this.comment = comment;
     }
 
-    public Date getCommentedAt() {
-        return commentedAt;
-    }
 
-    public void setCommentedAt(Date commentedAt) {
-        this.commentedAt = commentedAt;
-    }
 
     public boolean isDeleteStatus() {
         return deleteStatus;
@@ -78,5 +71,11 @@ public class Comment {
         this.commentedBy = commentedBy;
     }
 
+    public CookingPost getCommentedOn() {
+        return commentedOn;
+    }
 
+    public void setCommentedOn(CookingPost commentedOn) {
+        this.commentedOn = commentedOn;
+    }
 }

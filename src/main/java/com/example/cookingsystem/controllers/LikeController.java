@@ -48,12 +48,12 @@ public class LikeController {
     }
 
     // Get likes by current user
-    @GetMapping("/my-likes")
-    public ResponseEntity<List<Like>> getMyLikes(@AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        List<Like> likes = likeService.getLikesByUserId(userId);
-        return new ResponseEntity<>(likes, HttpStatus.OK);
-    }
+    // @GetMapping("/my-likes")
+    // public ResponseEntity<List<Like>> getMyLikes(@AuthenticationPrincipal UserDetails userDetails) {
+    //     String userId = userDetails.getUsername();
+    //     List<Like> likes = likeService.getLikesByUserId(userId);
+    //     return new ResponseEntity<>(likes, HttpStatus.OK);
+    // }
 
     // Check if current user liked a post
     @GetMapping("/post/{postId}/{userId}/status")
@@ -94,11 +94,11 @@ public class LikeController {
     }
 
     // Delete like (admin function)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLike(@PathVariable String id) {
-        if (likeService.deleteLike(id)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deleteLike(@PathVariable String id) {
+    //     if (likeService.deleteLike(id)) {
+    //         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //     }
+    //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // }
 }

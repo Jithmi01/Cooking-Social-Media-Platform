@@ -1,9 +1,8 @@
 package com.example.cookingsystem.dtos;
 
-import java.util.Date;
-
 import com.example.cookingsystem.models.Group;
 import com.example.cookingsystem.models.User;
+import java.util.Date;
 
 public class GroupPostDTO {
 
