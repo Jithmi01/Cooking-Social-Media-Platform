@@ -82,11 +82,6 @@ public class CommentController {
     }
 
 
-    // {
-    //     "comment": "woww!",
-    //     "commentedBy": "68113911060b9c32181e7964"
-    //   }
-      
 
     // Update comment
     @PutMapping("/{id}")
