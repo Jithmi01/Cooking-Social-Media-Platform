@@ -26,7 +26,6 @@ A social platform for food lovers to share recipes, post photos, and engage with
 - Lombok
 
 ### Frontend (React)
-- React 18+
 - React Router
 - Axios for API requests
 - Bootstrap / Tailwind CSS
@@ -34,42 +33,14 @@ A social platform for food lovers to share recipes, post photos, and engage with
 
 ---
 
-## 📁 Project Structure
-
-```
-
-cooking-social-platform/
-├── backend/
-│   ├── src/main/java/com/example/
-│   │   ├── controller/
-│   │   ├── model/
-│   │   ├── repository/
-│   │   ├── service/
-│   │   └── CookingSocialApplication.java
-│   └── resources/
-│       └── application.properties
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── App.js
-│   │   └── index.js
-│   └── public/
-└── README.md
-
-````
-
----
-
-## 🚀 Getting Started
-
 ### Backend
 
 1. Go to `backend/` folder.
 2. Configure `application.properties` for your DB.
 3. Run the app:
 ```bash
-./mvnw spring-boot:run
+Run Without Debugging
+select Java
 ````
 
 ### Frontend
