@@ -38,7 +38,6 @@ A social platform for food lovers to share recipes, post photos, and engage with
 1. Go to `backend/` folder.
 2. Configure `application.properties` for your DB.
 3. Run the app:
-```bash
 Run Without Debugging
 select Java
 ````
