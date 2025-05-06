@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for handling task completion logic.
+ */
 @Service
 public class TaskCompletionService {
 
@@ -21,6 +24,7 @@ public class TaskCompletionService {
     private final UserRepository userRepository;
     private final NotificationService notificationService;
 
+    // Constructor injection
     @Autowired
     public TaskCompletionService(TaskCompletionRepository taskCompletionRepository,
                                  TaskRepository taskRepository,
@@ -32,7 +36,7 @@ public class TaskCompletionService {
         this.notificationService = notificationService;
     }
 
-    // Get all completions
+    // Get all non-deleted completions
     public List<TaskCompletion> getAllCompletions() {
         return taskCompletionRepository.findAllByDeleteStatusFalse();
     }
@@ -47,7 +51,7 @@ public class TaskCompletionService {
         return taskCompletionRepository.findByTaskIdAndDeleteStatusFalse(taskId);
     }
 
-    // Check if user has completed a task
+    // Check if a user has already completed a task
     public boolean hasUserCompletedTask(String userId, String taskId) {
         return taskCompletionRepository
                 .findByTaskIdAndCompletedByIdAndDeleteStatusFalse(taskId, userId)
@@ -59,17 +63,18 @@ public class TaskCompletionService {
         return taskCompletionRepository.findByIdAndDeleteStatusFalse(id);
     }
 
-    // Create task completion
+    // Create a new task completion
     public TaskCompletion createCompletion(String taskId, String userId, int spentTime) {
         Optional<Task> taskOptional = taskRepository.findById(taskId);
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (taskOptional.isPresent() && userOptional.isPresent()) {
-            // Check if already completed
+            // Prevent duplicate completions
             if (hasUserCompletedTask(userId, taskId)) {
                 return null;
             }
 
+            // Create and save completion record
             TaskCompletion completion = new TaskCompletion();
             completion.setTask(taskOptional.get());
             completion.setCompletedBy(userOptional.get());
@@ -77,7 +82,7 @@ public class TaskCompletionService {
             completion.setCompletedAt(new Date());
             completion.setDeleteStatus(false);
 
-            // Send notification
+            // Send a notification to the user
             notificationService.createUserNotification(
                     userId,
                     "Task Completed!",
@@ -89,7 +94,7 @@ public class TaskCompletionService {
         return null;
     }
 
-    // Update completion (only spent time can be updated)
+    // Update only the spent time of a completion
     public TaskCompletion updateCompletion(String id, int newSpentTime) {
         return taskCompletionRepository.findById(id).map(completion -> {
             completion.setSpentTime(newSpentTime);
@@ -97,7 +102,7 @@ public class TaskCompletionService {
         }).orElse(null);
     }
 
-    // Delete completion (soft delete)
+    // Soft delete a task completion
     public boolean deleteCompletion(String id) {
         return taskCompletionRepository.findById(id).map(completion -> {
             completion.setDeleteStatus(true);

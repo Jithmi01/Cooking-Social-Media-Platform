@@ -6,25 +6,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+/**
+ * Represents a record of a completed task by a user.
+ */
 @Document(collection = "task_completions")
 public class TaskCompletion {
+
     @Id
-    private String id;
-    private Date completedAt;
-    private int spentTime; // in minutes
-    private boolean deleteStatus;
+    private String id; // Unique ID for the task completion
+
+    private Date completedAt; // Date and time the task was completed
+
+    private int spentTime; // Time spent to complete the task (in minutes)
+
+    private boolean deleteStatus; // Soft delete flag
 
     @DBRef(lazy = true)
-    private Task task;
+    private Task task; // Reference to the completed task
 
     @DBRef(lazy = true)
-    private User completedBy;
+    private User completedBy; // Reference to the user who completed the task
 
     // Default constructor
     public TaskCompletion() {
     }
 
-    // Overloaded constructor
+    // Parameterized constructor
     public TaskCompletion(String id, Date completedAt, int spentTime, boolean deleteStatus, Task task, User completedBy) {
         this.id = id;
         this.completedAt = completedAt;
