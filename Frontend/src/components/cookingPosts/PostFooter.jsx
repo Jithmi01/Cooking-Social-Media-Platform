@@ -23,7 +23,14 @@ const PostFooter = ({ post }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Get likes
+        const likesData = await likeApi.getLikesByPost(post.id);
+        setLikes(likesData);
         
+        // Check if user has liked this post
+        const likeStatus = await likeApi.getLikeStatus(post.id);
+        setIsLiked(likeStatus.liked);
+        setUserLike(likeStatus.likeId);
         
         // Get comments
         const commentsData = await commentApi.getCommentsByPost(post.id);
@@ -42,7 +49,19 @@ const PostFooter = ({ post }) => {
     try {
       setIsLoading(true);
       
-      
+      if (isLiked && userLike) {
+        // Unlike the post
+        await likeApi.deleteLike(userLike);
+        setIsLiked(false);
+        setUserLike(null);
+        setLikes(prev => prev.filter(like => like.id !== userLike));
+      } else {
+        // Like the post
+        const newLike = await likeApi.createLike(post.id);
+        setIsLiked(true);
+        setUserLike(newLike.id);
+        setLikes(prev => [...prev, newLike]);
+      }
     } catch (error) {
       console.error('Error toggling like status:', error);
     } finally {
