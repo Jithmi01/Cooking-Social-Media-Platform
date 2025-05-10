@@ -67,6 +67,16 @@ const notificationApi = {
     }
   },
 
+  // Delete notification (public access)
+  deleteNotification: async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/notifications/${id}`);
+      return response.status === 204;
+    } catch (error) {
+      console.error(`Error deleting notification with ID ${id}:`, error);
+      throw error;
+    }
+  },
 
   // Mark notification as read (public access)
   markAsRead: async (id) => {
@@ -79,6 +89,18 @@ const notificationApi = {
     }
   },
 
+  // Get unread notifications count for user (public access)
+  getUnreadCount: async (userId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/notifications/user/${userId}/unread-count`
+      );
+      return response.data.count;
+    } catch (error) {
+      console.error(`Error getting unread count for user ${userId}:`, error);
+      throw error;
+    }
+  },
 };
 
 export default notificationApi;
