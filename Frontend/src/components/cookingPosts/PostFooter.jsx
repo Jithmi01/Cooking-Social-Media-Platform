@@ -23,14 +23,7 @@ const PostFooter = ({ post }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get likes
-        const likesData = await likeApi.getLikesByPost(post.id);
-        setLikes(likesData);
         
-        // Check if user has liked this post
-        const likeStatus = await likeApi.getLikeStatus(post.id);
-        setIsLiked(likeStatus.liked);
-        setUserLike(likeStatus.likeId);
         
         // Get comments
         const commentsData = await commentApi.getCommentsByPost(post.id);
@@ -49,19 +42,7 @@ const PostFooter = ({ post }) => {
     try {
       setIsLoading(true);
       
-      if (isLiked && userLike) {
-        // Unlike the post
-        await likeApi.deleteLike(userLike);
-        setIsLiked(false);
-        setUserLike(null);
-        setLikes(prev => prev.filter(like => like.id !== userLike));
-      } else {
-        // Like the post
-        const newLike = await likeApi.createLike(post.id);
-        setIsLiked(true);
-        setUserLike(newLike.id);
-        setLikes(prev => [...prev, newLike]);
-      }
+      
     } catch (error) {
       console.error('Error toggling like status:', error);
     } finally {
@@ -105,7 +86,19 @@ const PostFooter = ({ post }) => {
     setIsModalOpen(true);
   };
 
-
+  const handleDeleteComment = async (commentId) => {
+    try {
+      setIsLoading(true);
+      await commentApi.deleteComment(commentId);
+      setComments(prev => prev.filter(c => c.id !== commentId));
+      toast.success('Comment deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast.error('Failed to delete comment. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -203,6 +196,7 @@ const PostFooter = ({ post }) => {
                           Edit
                         </button>
                         <button
+                          onClick={() => handleDeleteComment(comment.id)}
                           className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                         >
                           Delete
@@ -262,6 +256,7 @@ const PostFooter = ({ post }) => {
                         Edit
                       </button>
                       <button 
+                        onClick={() => handleDeleteComment(comment.id)}
                         className="text-xs text-red-600 hover:text-red-800"
                       >
                         Delete
