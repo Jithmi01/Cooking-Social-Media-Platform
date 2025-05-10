@@ -245,7 +245,23 @@ const PostFooter = ({ post }) => {
                     {new Date(comment.commentedAt).toLocaleString()}
                   </div>
                   
-    
+                  {/* Comment actions (edit/delete) */}
+                  {comment.commentedBy.id === localStorage.getItem("userId") && (
+                    <div className="flex space-x-2 mt-2 justify-end">
+                      <button 
+                        onClick={() => handleEditComment(comment)}
+                        className="text-xs text-green-600 hover:text-green-800"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-xs text-red-600 hover:text-red-800"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}
