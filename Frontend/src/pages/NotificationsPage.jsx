@@ -7,7 +7,78 @@ const NotificationsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
- 
+  useEffect(() => {
+    setLoading(true);
+    notificationApi
+      .getUserNotifications(localStorage.getItem("userId"))
+      .then((notifications) => {
+        setNotifications(notifications);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load notifications");
+        setLoading(false);
+      });
+  }, []);
+
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case "task":
+        return <Check className="text-green-500" size={20} />;
+      case "message":
+        return <Bell className="text-blue-500" size={20} />;
+      case "alert":
+        return <AlertCircle className="text-red-500" size={20} />;
+      default:
+        return <Bell className="text-gray-500" size={20} />;
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6">Notifications</h1>
+        <div className="space-y-4">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="animate-pulse flex p-4 bg-white rounded-lg shadow"
+            >
+              <div className="h-10 w-10 bg-gray-200 rounded-full mr-3"></div>
+              <div className="flex-1">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto p-4">
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+          <div className="flex items-center">
+            <AlertCircle className="text-red-500 mr-2" size={20} />
+            <p className="text-red-700">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -43,6 +114,7 @@ const NotificationsPage = () => {
               }`}
             >
               <div className="flex-shrink-0 mr-3">
+                {getNotificationIcon(notification.type)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between">
