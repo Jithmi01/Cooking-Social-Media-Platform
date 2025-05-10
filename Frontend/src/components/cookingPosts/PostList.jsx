@@ -168,8 +168,6 @@ const PostList = ({ posts, onUpdateOrDelete, onSubmitSuccess }) => {
             </p>
           </div>
 
-          
-
           {/* Media Container */}
           <MediaContainer post={post} />
 
