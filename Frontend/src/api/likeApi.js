@@ -48,6 +48,16 @@ const likeApi = {
     }
   },
 
+  // Delete like
+  deleteLike: async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/likes/${id}`);
+      return response.status === 204;
+    } catch (error) {
+      console.error(`Error deleting like with ID ${id}:`, error);
+      throw error;
+    }
+  },
 
   // Check like status
   getLikeStatus: async (postId) => {
