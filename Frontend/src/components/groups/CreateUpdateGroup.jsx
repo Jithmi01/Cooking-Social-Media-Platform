@@ -73,9 +73,66 @@ const CreateUpdateGroup = ({ group, onSubmit, onCancel }) => {
   };
 
   return (
-   <div>
-    
-   </div>
+   <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">
+        {group ? "Update Group" : "Create New Group"}
+      </h2>
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label
+            htmlFor="name"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Group Name *
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="Enter group name"
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
+        </div>
+
+        <div className="mb-6">
+          <label
+            htmlFor="description"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Description *
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.description ? "border-red-500" : "border-gray-300"
+            }`}
+            rows="4"
+            placeholder="Enter group description"
+          ></textarea>
+          {errors.description && (
+            <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+          )}
+        </div>
+
+        
+
+
+
+
+        
+      </form>
+    </div>
   );
 };
 
