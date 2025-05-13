@@ -24,4 +24,27 @@ const customStyles = {
     zIndex: 1000,
   },
 };
+Modal.setAppElement("#root");
 
+const SingleGroupPage = () => {
+  const { id } = useParams();
+
+  const [group, setGroup] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPost, setCurrentPost] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const [file, setFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isMember, setIsMember] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    mediaUrl: "",
+    groupId: id,
+  });
+
+}
