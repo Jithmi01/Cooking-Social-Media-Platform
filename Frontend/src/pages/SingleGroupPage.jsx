@@ -184,4 +184,10 @@ const SingleGroupPage = () => {
       setLoading(false);
     }
   };
+
+  // Confirm delete post
+  const confirmDelete = (post) => {
+    setPostToDelete(post);
+    setIsDeleteModalOpen(true);
+  };
 }
