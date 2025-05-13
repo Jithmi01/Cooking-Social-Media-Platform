@@ -84,5 +84,23 @@ const SingleGroupPage = () => {
       setFile(e.target.files[0]);
     }
   };
+  // Upload file to Firebase
+  const uploadFileCall = async () => {
+    if (!file) return null;
+
+    try {
+      const downloadUrl = await uploadFile(
+        file,
+        `group-posts/${Date.now()}_${file.name}`,
+        (progress) => {
+          setUploadProgress(Math.round((progress * 100) / 100));
+        }
+      );
+      return downloadUrl;
+    } catch (err) {
+      console.error("Error uploading file:", err);
+      throw err;
+    }
+  };
 
 }
