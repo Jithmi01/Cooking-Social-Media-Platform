@@ -110,4 +110,19 @@ const SingleGroupPage = () => {
       [name]: value,
     });
   };
+
+    // Open modal for creating new post
+
+  const openCreateModal = () => {
+    setCurrentPost(null);
+    setFormData({
+      title: "",
+      description: "",
+      mediaUrl: "",
+      groupId: id,
+    });
+    setFile(null);
+    setUploadProgress(0);
+    setIsModalOpen(true);
+  };
 }
