@@ -125,4 +125,22 @@ const SingleGroupPage = () => {
     setUploadProgress(0);
     setIsModalOpen(true);
   };
+
+  // Open modal for editing post
+  const openEditModal = (post) => {
+    setCurrentPost(post);
+    setFormData({
+      title: post.title,
+      description: post.description,
+      mediaUrl: post.mediaUrl,
+      groupId: id,
+    });
+    setIsModalOpen(true);
+  };
+
+  // Close all modals
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
+  };
 }
