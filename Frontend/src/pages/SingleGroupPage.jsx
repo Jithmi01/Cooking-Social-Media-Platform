@@ -190,4 +190,47 @@ const SingleGroupPage = () => {
     setPostToDelete(post);
     setIsDeleteModalOpen(true);
   };
+
+    // Delete post
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      await groupPostApi.deleteGroupPost(postToDelete.id);
+      setPosts(posts.filter((p) => p.id !== postToDelete.id));
+      closeModal();
+    } catch (err) {
+      console.error("Error deleting post:", err);
+      alert("Failed to delete post. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading && !group) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <p>{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!group) {
+    return <div>Group not found</div>;
+  }
 }
