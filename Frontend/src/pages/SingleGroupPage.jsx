@@ -102,5 +102,12 @@ const SingleGroupPage = () => {
       throw err;
     }
   };
-
+// Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 }
