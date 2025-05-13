@@ -143,4 +143,45 @@ const SingleGroupPage = () => {
     setIsModalOpen(false);
     setIsDeleteModalOpen(false);
   };
+
+
+  // Submit post (create or update)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      let mediaUrl = formData.mediaUrl;
+
+      // Upload new file if selected
+      if (file) {
+        mediaUrl = await uploadFileCall();
+      }
+
+      const postData = {
+        ...formData,
+        mediaUrl,
+      };
+      if (currentPost) {
+        // Update existing post
+        await groupPostApi.updateGroupPost(currentPost.id, postData);
+        setPosts(
+          posts.map((p) =>
+            p.id === currentPost.id ? { ...p, ...postData } : p
+          )
+        );
+      } else {
+        // Create new post
+        const newPost = await groupPostApi.createGroupPost(postData);
+        setPosts([newPost, ...posts]);
+      }
+
+      closeModal();
+    } catch (err) {
+      console.error("Error saving post:", err);
+      alert("Failed to save post. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 }
