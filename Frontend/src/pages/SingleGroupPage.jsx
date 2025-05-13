@@ -47,4 +47,36 @@ const SingleGroupPage = () => {
     groupId: id,
   });
 
+  // Fetch group and posts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [groupData, postsData, myGroups] = await Promise.all([
+          groupApi.getGroupById(id),
+          groupPostApi.getPostsByGroupId(id),
+          groupApi.getMyGroups(),
+        ]);
+        if (myGroups) {
+          console.log("user has groups");
+          const userGroup = myGroups.find((group) => group.id === id);
+          console.log(`user gruo[ ${userGroup}]`);
+          if (userGroup) {
+            setIsMember(true);
+          }
+        }
+        setGroup(groupData);
+        setPosts(postsData);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load group data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
 }
